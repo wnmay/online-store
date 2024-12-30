@@ -29,8 +29,22 @@ export const deleteProduct = async (req,res)=>{
 }
 
 export const getProduct = async (req,res)=>{
+    const {tags,sortBy,sortOrder} = req.query;
 	try {
-		const products = await Product.find();
+        let filter = {};
+        if(tags){
+            const tagArray = tags.split(',');
+            filter = {tags: {$in: tagArray}};
+        }
+        let sort = {};
+        if(sortBy){
+            const order = sortOrder === "asc"? 1:-1;
+            sort = {[sortBy]: order}
+        }
+        else{
+            sort = {createdAt: -1};
+        }
+		const products = await Product.find(filter).sort(sort);
 		res.status(200).json({ success: true, data: products });
 	} catch (error) {
 		res.status(500).json({ success: false, message: "internal server Error" });
