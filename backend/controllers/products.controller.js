@@ -3,7 +3,7 @@ import Product from "../models/product.model.js";
 
 export const postProducts = async (req,res)=>{
     const product = req.body;
-	if (!product.name || !product.price || !product.image ) {
+	if (!product.name || !product.price || !product.image || !product.tag) {
 		return res.status(400).send('All fields are required.');
 	}
 	const addedProduct = new Product(product);
