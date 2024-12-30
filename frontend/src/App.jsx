@@ -1,8 +1,9 @@
+import Menubar from "./components/MenuBar"
+
 function App() {
 
   return (
     <>
-      <div>main</div>
     </>
   )
 }
