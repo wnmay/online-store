@@ -1,0 +1,1 @@
+export const tags = ["Electronics", "Clothing", "Furniture", "Stationery", "Other"];

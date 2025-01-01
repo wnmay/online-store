@@ -3,12 +3,14 @@ import Store from './pages/Store';
 import Add from './pages/Add';
 import About from './pages/About';
 import MenuBar from './components/MenuBar';
+import { FilterProvider } from './components/FilterContext';
 
 function App() {
 
   return (
     <>
-     <Router>
+    <FilterProvider>
+    <Router>
       <MenuBar />
       <Routes>
         <Route path="/" element={<Store />} />
@@ -16,6 +18,8 @@ function App() {
         <Route path="/about" element={<About />} />
       </Routes>
     </Router>
+
+    </FilterProvider>
     </>
   )
 }
