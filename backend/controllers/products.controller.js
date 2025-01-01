@@ -29,12 +29,12 @@ export const deleteProduct = async (req,res)=>{
 }
 
 export const getProduct = async (req,res)=>{
-    const {tags,sortBy,sortOrder} = req.query;
+    const {tag,sortBy,sortOrder} = req.query;
 	try {
         let filter = {};
-        if(tags){
-            const tagArray = tags.split(',');
-            filter = {tags: {$in: tagArray}};
+        if(tag){
+            const tagArray = tag.split(',');
+            filter = {tag: {$in: tagArray}};
         }
         let sort = {};
         if(sortBy){
