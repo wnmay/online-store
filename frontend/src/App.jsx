@@ -5,10 +5,10 @@ import About from './pages/About';
 import MenuBar from './components/MenuBar';
 import { FilterProvider } from './components/FilterContext';
 
+
 function App() {
 
   return (
-    <>
     <FilterProvider>
     <Router>
       <MenuBar />
@@ -18,9 +18,8 @@ function App() {
         <Route path="/about" element={<About />} />
       </Routes>
     </Router>
-
     </FilterProvider>
-    </>
+
   )
 }
 
