@@ -11,7 +11,9 @@ const Store = ()=>{
         <>
         <button onClick={toggleFilter}>show</button>
         {filterAppear && <Filter/>}
+        <div className="flex justify-center item-center">
         <ProductSection/>
+        </div>
         </>
     )
 }

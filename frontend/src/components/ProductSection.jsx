@@ -41,7 +41,7 @@ const ProductSection = () => {
   }, [products]);
 
   return (
-    <div>
+    <div className="grid grid-cols-3 gap-4">
       {products.map((product,key) => (
         <ProductContainer key={key} product={product} refresh={fetchProducts}/>
       ))}

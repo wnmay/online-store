@@ -52,7 +52,7 @@ const ProductContainer = ({ product, refresh }) => {
 
   return (
     <>
-      <div key={product._id}>
+      <div key={product._id} className='bg-gray-200 p-3 rounded'>
         <div>{product.name}</div>
         <div>{product.price}</div>
         <div>{product.tag}</div>
