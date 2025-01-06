@@ -45,7 +45,7 @@ const Add = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-12 bg-white p-8 rounded-lg shadow-xl">
+    <div className="max-w-lg mx-auto m-8 bg-white p-8 rounded-lg shadow-xl">
       <h2 className="text-2xl font-semibold text-center text-primary mb-6">Add New Product</h2>
       <form onSubmit={addProduct} className="space-y-6">
         <div>

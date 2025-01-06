@@ -25,7 +25,7 @@ const Filter = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto mt-8 space-y-6">
+    <div className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto mt-8 space-y-6">
       <div className="flex flex-wrap gap-4">
         <button
           onClick={() => setSelectedTags([])}
@@ -45,8 +45,8 @@ const Filter = () => {
       </div>
 
 
-      <div className="flex gap-4 items-center">
-        <div className="w-full">
+      <div className="grid grid-cols-3 gap-4 ">
+        <div className="col-span-2 w-full">
           <select
             onChange={(e) => setSortBy(e.target.value)}
             value={sortBy}

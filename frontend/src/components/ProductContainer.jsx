@@ -57,7 +57,7 @@ const ProductContainer = ({ product, refresh }) => {
           />
         </figure>
         <div className="card-body">
-          <h2 className="card-title">{product.name}</h2>
+          <h2 className="card-title text-black">{product.name}</h2>
           <p className="text-lg text-gray-600">${product.price}</p>
           <p className="text-sm text-gray-500">{product.tag}</p>
           <div className="card-actions justify-end">
