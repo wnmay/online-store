@@ -4,12 +4,13 @@ import Add from './pages/Add';
 import About from './pages/About';
 import MenuBar from './components/MenuBar';
 import { FilterProvider } from './components/FilterContext';
-
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
   return (
     <FilterProvider>
+      <Toaster/>
     <Router>
       <MenuBar />
       <Routes>

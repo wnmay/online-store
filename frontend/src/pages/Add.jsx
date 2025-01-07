@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { tags } from "../utils/config/tags";
+import toast from "react-hot-toast";
 
 const Add = () => {
   const [newProduct, setNewProduct] = useState({
@@ -36,11 +37,15 @@ const Add = () => {
             tag: tags[0],
           });
         }
+        toast.success("Data added successfully")
+        
       } else {
         console.error("Error adding product:", response.statusText);
+        toast.error("Failed to add product")
       }
     } catch (error) {
       console.error("Error adding product:", error);
+      toast.error("Failed to add product")
     }
   };
 

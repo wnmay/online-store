@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { tags } from "../utils/config/tags";
+import toast from "react-hot-toast";
 
 const ProductContainer = ({ product, refresh }) => {
   const [editIsOpen, setEditIsOpen] = useState(false);
@@ -20,30 +21,51 @@ const ProductContainer = ({ product, refresh }) => {
   };
 
   const updateProduct = async (e) => {
-    e.preventDefault();
-    const response = await fetch(
-      `http://localhost:5000/api/products/${product._id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProduct),
+    try {
+      e.preventDefault();
+      const response = await fetch(
+        `http://localhost:5000/api/products/${product._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProduct),
+        }
+      );
+      if (response.ok) {
+        refresh();
+        toast.success("Product updated successfully");
+        setEditIsOpen(false);
       }
-    );
-    if (response.ok) {
-      refresh();
+      else{
+        console.error("Error updating product:", response.statusText);
+        toast.error("Failed to update product");
+        
+      }    
+    } catch (error) {
+      console.error("Error updating product:", error);
+      toast.error("Failed to update product") 
     }
-    setEditIsOpen(false);
   };
 
   const deleteProduct = async () => {
-    const response = await fetch(
-      `http://localhost:5000/api/products/${product._id}`,
-      { method: "DELETE" }
-    );
-    if (response.ok) {
-      refresh();
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/products/${product._id}`,
+        { method: "DELETE" }
+      );
+      if (response.ok) {
+        refresh();
+        setIsDeleteOpen(false);
+        toast.success("Delete successfully")
+      }
+      else{
+        console.error("Error deleting product:", response.statusText);
+        toast.error("Failed to delete product");
+      }    
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("Failed to delete product");
     }
-    setIsDeleteOpen(false);
   };
 
   return (
