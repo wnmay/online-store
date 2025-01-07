@@ -6,7 +6,7 @@ const Add = () => {
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
-    image: "",
+    image: null,
     tag: tags[0],
   });
 
@@ -18,13 +18,26 @@ const Add = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setNewProduct((prev) => ({
+      ...prev,
+      image: file,
+    }));
+  };
+
   const addProduct = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", newProduct.name);
+    formData.append("price", newProduct.price);
+    formData.append("image", newProduct.image);
+    formData.append("tag", newProduct.tag);
+
     try {
       const response = await fetch("http://localhost:5000/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newProduct),
+        body: formData,
       });
 
       if (response.ok) {
@@ -33,19 +46,18 @@ const Add = () => {
           setNewProduct({
             name: "",
             price: "",
-            image: "",
+            image: null,
             tag: tags[0],
           });
+          toast.success("Product added successfully");
         }
-        toast.success("Data added successfully")
-        
       } else {
         console.error("Error adding product:", response.statusText);
-        toast.error("Failed to add product")
+        toast.error("Failed to add product");
       }
     } catch (error) {
       console.error("Error adding product:", error);
-      toast.error("Failed to add product")
+      toast.error("Failed to add product");
     }
   };
 
@@ -78,18 +90,6 @@ const Add = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Image URL</label>
-          <input
-            type="text"
-            name="image"
-            value={newProduct.image}
-            onChange={handleInputChange}
-            className="input input-bordered w-full mt-2"
-            required
-          />
-        </div>
-
-        <div>
           <label className="block text-sm font-medium text-gray-700">Tag</label>
           <select
             name="tag"
@@ -106,6 +106,17 @@ const Add = () => {
           </select>
         </div>
 
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Image</label>
+          <input
+            type="file"
+            name="image"
+            onChange={handleFileChange}
+            className="w-full mt-2 text-gray-700 file:btn btn-primary file:text-black"
+            required
+          />
+        </div>
+
         <div className="flex justify-end gap-4 mt-6">
           <button type="submit" className="btn btn-primary w-full sm:w-auto">
             Add Product
@@ -117,5 +128,3 @@ const Add = () => {
 };
 
 export default Add;
-
-

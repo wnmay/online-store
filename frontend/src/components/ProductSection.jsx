@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import FilterContext from "./FilterContext";
 import ProductContainer from "./ProductContainer";
+import { Link } from "react-router-dom";
 
 const ProductSection = () => {
   const { selectedTags, sortBy, sortOrder } = useContext(FilterContext);
@@ -42,11 +43,26 @@ const ProductSection = () => {
   }, [products]);
 
   return (
+    <>
+    {products.length==0?
+    <div>
+      <div className="mb-4 text-2xl font-semibold">Product not found . . .</div>
+      <Link
+        to="/add"
+        className="text-xl font-semibold text-primary hover:text-secondary underline"
+      >
+        + Add new product
+      </Link>
+    </div>
+    :
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {products.map((product) => (
+      {
+      products.map((product) => (
         <ProductContainer key={product._id} product={product} refresh={fetchProducts} />
       ))}
     </div>
+    }
+    </>
   );
 };
 

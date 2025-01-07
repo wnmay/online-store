@@ -8,7 +8,7 @@ const ProductContainer = ({ product, refresh }) => {
   const [updatedProduct, setUpdatedProduct] = useState({
     name: product.name,
     price: product.price,
-    image: product.image,
+    image: null,
     tag: product.tag,
   });
 
@@ -20,48 +20,60 @@ const ProductContainer = ({ product, refresh }) => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setUpdatedProduct((prev) => ({
+      ...prev,
+      image: file,
+    }));
+  };
+
   const updateProduct = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", updatedProduct.name);
+    formData.append("price", updatedProduct.price);
+    formData.append("tag", updatedProduct.tag);
+    if (updatedProduct.image) {
+      formData.append("image", updatedProduct.image);
+    }
+
     try {
-      e.preventDefault();
       const response = await fetch(
-        `http://localhost:5000/api/products/${product._id}`,
-        {
+        `http://localhost:5000/api/products/${product._id}`,{
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedProduct),
+          body: formData,
         }
       );
       if (response.ok) {
         refresh();
         toast.success("Product updated successfully");
         setEditIsOpen(false);
-      }
-      else{
+      } else {
         console.error("Error updating product:", response.statusText);
         toast.error("Failed to update product");
-        
-      }    
+      }
     } catch (error) {
       console.error("Error updating product:", error);
-      toast.error("Failed to update product") 
+      toast.error("Failed to update product");
     }
   };
 
   const deleteProduct = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${product._id}`,
-        { method: "DELETE" }
+        `http://localhost:5000/api/products/${product._id}`,{ 
+         method: "DELETE" 
+        }
       );
       if (response.ok) {
         refresh();
         setIsDeleteOpen(false);
-        toast.success("Delete successfully")
-      }
-      else{
+        toast.success("Product deleted successfully");
+      } else {
         console.error("Error deleting product:", response.statusText);
         toast.error("Failed to delete product");
-      }    
+      }
     } catch (error) {
       console.error("Error deleting product:", error);
       toast.error("Failed to delete product");
@@ -73,7 +85,7 @@ const ProductContainer = ({ product, refresh }) => {
       <div key={product._id} className="card w-96 bg-white shadow-xl">
         <figure>
           <img
-            src={product.image}
+            src={`http://localhost:5000${product.image}`}
             alt={product.name}
             className="w-full h-48 object-cover transform transition-transform duration-500 hover:scale-110"
           />
@@ -99,7 +111,7 @@ const ProductContainer = ({ product, refresh }) => {
             <h2 className="text-xl font-semibold">Edit Product</h2>
             <form onSubmit={updateProduct} className="space-y-4 mt-4">
               <div>
-                <label className="block text-gray-700">Product Name</label>
+                <label className="block text-white">Product Name</label>
                 <input
                   type="text"
                   name="name"
@@ -109,7 +121,7 @@ const ProductContainer = ({ product, refresh }) => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700">Price</label>
+                <label className="block text-white">Price</label>
                 <input
                   type="number"
                   name="price"
@@ -119,19 +131,7 @@ const ProductContainer = ({ product, refresh }) => {
                 />
               </div>
               <div>
-              <label className="block mt-4 mb-2 text-sm font-medium text-gray-700">
-            Image
-          </label>
-          <input
-            type="text"
-            name="image"
-            value={updatedProduct.image}
-            onChange={handleInputChange}
-            className="input input-bordered w-full mt-2"
-          />
-      </div>
-              <div>
-                <label className="block text-gray-700">Tag</label>
+                <label className="block text-white">Tag</label>
                 <select
                   name="tag"
                   onChange={handleInputChange}
@@ -144,6 +144,15 @@ const ProductContainer = ({ product, refresh }) => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label className="block text-white">Image</label>
+                <input
+                  type="file"
+                  name="image"
+                  onChange={handleFileChange}
+                  className="w-full mt-2 text-gray-700 file:btn btn-primary file:text-black"
+                />
               </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
@@ -181,12 +190,3 @@ const ProductContainer = ({ product, refresh }) => {
 };
 
 export default ProductContainer;
-
-
-
-
-
-
-
-
-
