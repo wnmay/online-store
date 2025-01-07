@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 import Product from "../models/product.model.js";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const postProducts = async (req,res)=>{
     const {name,price,tag} = req.body;
@@ -24,18 +30,26 @@ export const postProducts = async (req,res)=>{
 	}
 }
 
-export const deleteProduct = async (req,res)=>{
-    const {id} = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ success: false, message: "Product not found" });
+export const deleteProduct = async (req, res) => {
+	const { id } = req.params;
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+	  return res.status(404).json({ success: false, message: "Invalid product ID" });
 	}
 	try {
-		await Product.findByIdAndDelete(id);
-		res.status(200).json({success:true, message: "product deleted" });
+	  const product = await Product.findById(id);
+	  const imagePath = path.join(__dirname, "../uploads", path.basename(product.image));
+	  await Product.findByIdAndDelete(id);
+	  try {
+		await fs.unlink(imagePath);
+	  } catch (error) {
+		console.error("Failed to delete file:", error.message);
+	  }
+	  res.status(200).json({ success: true, message: "Product deleted" });
 	} catch (error) {
-		res.status(500).json({success:false, message: 'internal server error'})
+	  console.error("Error deleting product:", error);
+	  res.status(500).json({ success: false, message: "Internal server error" });
 	}
-}
+  };
 
 export const getProduct = async (req,res)=>{
     const {tag,sortBy,sortOrder} = req.query;
