@@ -2,11 +2,20 @@ import mongoose from "mongoose";
 import Product from "../models/product.model.js";
 
 export const postProducts = async (req,res)=>{
-    const product = req.body;
-	if (!product.name || !product.price || !product.image || !product.tag) {
+    const {name,price,tag} = req.body;
+	
+	if (!req.file) {
+		return res.status(400).send("Product image is required.");
+	}
+	if (!name || !price || !tag) {
 		return res.status(400).send('All fields are required.');
 	}
-	const addedProduct = new Product(product);
+	const addedProduct = new Product({
+		name: name,
+		price: price,
+		image: `/uploads/${req.file.filename}`,
+		tage: tag
+	});
 	try {
 		await addedProduct.save();
 		res.status(201).json({success:true, data: addedProduct });
@@ -53,15 +62,18 @@ export const getProduct = async (req,res)=>{
 
 export const updateProduct = async (req, res) => {
 	const { id } = req.params;
-	const product = req.body;
-
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(404).json({ success: false, message: "Product not found" });
 	}
+
 	try {
-		const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
+		let updatedFields = { ...req.body };
+		if (req.file) {
+			updatedFields.image = `/uploads/${req.file.filename}`;
+		}
+		const updatedProduct = await Product.findByIdAndUpdate(id, updatedFields, { new: true });
 		res.status(200).json({ success: true, data: updatedProduct });
 	} catch (error) {
-		res.status(500).json({ success: false, message: "internal server error" });
+		res.status(500).json({ success: false, message: "Internal server error" });
 	}
 };

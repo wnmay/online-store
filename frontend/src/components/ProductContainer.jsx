@@ -73,7 +73,7 @@ const ProductContainer = ({ product, refresh }) => {
       <div key={product._id} className="card w-96 bg-white shadow-xl">
         <figure>
           <img
-            src={product.image}
+            src={`http://localhost:5000${product.image}`}
             alt={product.name}
             className="w-full h-48 object-cover transform transition-transform duration-500 hover:scale-110"
           />
