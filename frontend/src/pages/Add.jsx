@@ -7,7 +7,7 @@ const Add = () => {
     name: "",
     price: "",
     image: null,
-    tag: tags[0],
+    tag: "",
   });
 
   const handleInputChange = (e) => {
@@ -47,7 +47,7 @@ const Add = () => {
             name: "",
             price: "",
             image: null,
-            tag: tags[0],
+            tag: "",
           });
           toast.success("Product added successfully");
         }
@@ -98,6 +98,9 @@ const Add = () => {
             className="select select-bordered w-full mt-2"
             required
           >
+            <option value="" disabled>
+                Please select a tag...
+              </option>
             {tags.map((tag) => (
               <option value={tag} key={tag}>
                 {tag}

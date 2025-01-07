@@ -20,7 +20,7 @@ export const postProducts = async (req,res)=>{
 		name: name,
 		price: price,
 		image: `/uploads/${req.file.filename}`,
-		tage: tag
+		tag: tag
 	});
 	try {
 		await addedProduct.save();
