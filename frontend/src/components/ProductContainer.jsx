@@ -87,7 +87,7 @@ const ProductContainer = ({ product, refresh }) => {
           <img
             src={`http://localhost:5000${product.image}`}
             alt={product.name}
-            className="w-full h-48 object-cover transform transition-transform duration-500 hover:scale-110"
+            className="w-full h-48 object-contain transform transition-transform duration-500 hover:scale-110"
           />
         </figure>
         <div className="card-body">
