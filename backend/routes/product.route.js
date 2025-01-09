@@ -2,11 +2,11 @@ import express from 'express'
 import { deleteProduct, getProduct, postProducts, updateProduct } from '../controllers/products.controller.js'
 import upload from '../middleware/multerConfig.js'
 
-const router = express.Router()
+const productRouter = express.Router()
 
-router.post("/",upload.single('image'),postProducts)
-router.delete("/:id", deleteProduct)
-router.get("/",getProduct)
-router.put("/:id",upload.single('image'),updateProduct)
+productRouter.post("/products",upload.single('image'),postProducts)
+productRouter.delete("/products/:id", deleteProduct)
+productRouter.get("/products",getProduct)
+productRouter.put("/products/:id",upload.single('image'),updateProduct)
 
-export default router;
+export default productRouter;

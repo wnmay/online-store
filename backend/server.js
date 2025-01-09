@@ -5,6 +5,7 @@ import router from "./routes/product.route.js";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import productRouter from "./routes/product.route.js";
 
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +20,7 @@ app.use(cors({
 	origin: "*",
   }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/api/products",router)
+app.use("/api/products",productRouter)
 if(process.env.NODE_ENV === "production"){
 	app.use(express.static(path.join(__dirname,"../frontend/dist")))
 
