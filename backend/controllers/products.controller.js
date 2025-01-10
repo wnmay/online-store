@@ -24,9 +24,9 @@ export const postProducts = async (req,res)=>{
 	});
 	try {
 		await addedProduct.save();
-		res.status(201).json({success:true, data: addedProduct });
+		return res.status(201).json({success:true, data: addedProduct });
 	} catch (error) {
-		res.status(500).json({success:false, message: 'Internal server error'})
+		return res.status(500).json({success:false, message: 'Internal server error'})
 	}
 }
 
@@ -44,10 +44,10 @@ export const deleteProduct = async (req, res) => {
 	  } catch (error) {
 		console.error("Failed to delete file:", error.message);
 	  }
-	  res.status(200).json({ success: true, message: "Product deleted" });
+	  return res.status(200).json({ success: true, message: "Product deleted" });
 	} catch (error) {
 	  console.error("Error deleting product:", error);
-	  res.status(500).json({ success: false, message: "Internal server error" });
+	  return res.status(500).json({ success: false, message: "Internal server error" });
 	}
   };
 
@@ -68,9 +68,9 @@ export const getProduct = async (req,res)=>{
             sort = {createdAt: -1};
         }
 		const products = await Product.find(filter).sort(sort);
-		res.status(200).json({ success: true, data: products });
+		return res.status(200).json({ success: true, data: products });
 	} catch (error) {
-		res.status(500).json({ success: false, message: "internal server Error" });
+		return res.status(500).json({ success: false, message: "internal server Error" });
 	}
 }
 
@@ -86,8 +86,8 @@ export const updateProduct = async (req, res) => {
 			updatedFields.image = `/uploads/${req.file.filename}`;
 		}
 		const updatedProduct = await Product.findByIdAndUpdate(id, updatedFields, { new: true });
-		res.status(200).json({ success: true, data: updatedProduct });
+		return res.status(200).json({ success: true, data: updatedProduct });
 	} catch (error) {
-		res.status(500).json({ success: false, message: "Internal server error" });
+		return res.status(500).json({ success: false, message: "Internal server error" });
 	}
 };

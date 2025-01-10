@@ -4,12 +4,11 @@ import User from "../models/user.model.js";
 export const registerUser = async (req,res) =>{
     const {email,password,username} = req.body;
     if(!email || !password || !username){
-        res.status(400).send('All fields are required.');
-        return;
+        return res.status(400).send('All fields are required.');
     }
     const userExist = await User.findOne({email});
     if(userExist){
-        res.status(400).send("This email has already registered")
+        return res.status(400).send("This email has already registered")
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password,salt);
@@ -20,9 +19,9 @@ export const registerUser = async (req,res) =>{
     })
     try {
         await user.save()
-        res.status(201).json({success:true, data: user });
+        return res.status(201).json({success:true, data: user });
     } catch (error) {
-        res.status(500).json({success:false, message: 'Internal server error'})
+        return res.status(500).json({success:false, message: 'Internal server error'})
     }
 }
 
