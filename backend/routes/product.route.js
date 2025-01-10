@@ -4,9 +4,9 @@ import upload from '../middleware/multerConfig.js'
 
 const productRouter = express.Router()
 
-productRouter.post("/products",upload.single('image'),postProducts)
-productRouter.delete("/products/:id", deleteProduct)
-productRouter.get("/products",getProduct)
-productRouter.put("/products/:id",upload.single('image'),updateProduct)
+productRouter.post("/",upload.single('image'),postProducts)
+productRouter.delete("/:id", deleteProduct)
+productRouter.get("/",getProduct)
+productRouter.put("/:id",upload.single('image'),updateProduct)
 
 export default productRouter;
