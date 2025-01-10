@@ -25,3 +25,22 @@ export const registerUser = async (req,res) =>{
         res.status(500).json({success:false, message: 'Internal server error'})
     }
 }
+
+export const loginUser = async (req,res) =>{
+    const {email,password} = req.body;
+    try {
+        const user = await User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({success: false, message: 'This email has not been registered.'});
+        }
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (isPasswordCorrect) {
+            return res.status(200).json({success: true, data: user });
+        } else {
+            return res.status(400).json({success: false, message: 'Wrong password' });
+        }   
+    } catch (error) {
+        return res.status(500).json({success:false, message: 'Internal server error'});
+    }
+}
