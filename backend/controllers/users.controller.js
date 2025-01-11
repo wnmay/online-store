@@ -23,7 +23,7 @@ export const registerUser = async (req,res) =>{
         const token = generateToken(user._id);
         return res.status(201).json({success:true, 
             data:{
-                id: user._id,
+                _id: user._id,
                 email: user.email,
                 username: user.username,
             },token
@@ -46,7 +46,7 @@ export const loginUser = async (req,res) =>{
             const token = generateToken(user._id);
             return res.status(200).json({success: true, 
                 data:{
-                    id: user._id,
+                    _id: user._id,
                     email: user.email,
                     username: user.username,
                 },token
@@ -60,7 +60,20 @@ export const loginUser = async (req,res) =>{
 }
 
 export const getUser = async (req,res) =>{
-    return res.status(200).json(req.user)
+    const {_id, username, email} = await User.findById(req.user.id);
+    try {
+        res.status(200).json({success: true,
+            data:{
+                _id: _id,
+                username: username,
+                email: email,
+            }
+        })   
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({success:false, message: 'Internal server error'});
+        
+    }
 }
 
 const generateToken = (id)=>{
