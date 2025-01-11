@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req,res) =>{
     const {email,password,username} = req.body;
@@ -18,8 +19,15 @@ export const registerUser = async (req,res) =>{
         username: username
     })
     try {
-        await user.save()
-        return res.status(201).json({success:true, data: user });
+        await user.save();
+        const token = generateToken(user._id);
+        return res.status(201).json({success:true, 
+            data:{
+                id: user._id,
+                email: user.email,
+                username: user.username,
+            },token
+         });
     } catch (error) {
         return res.status(500).json({success:false, message: 'Internal server error'})
     }
@@ -35,11 +43,26 @@ export const loginUser = async (req,res) =>{
         }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (isPasswordCorrect) {
-            return res.status(200).json({success: true, data: user });
+            const token = generateToken(user._id);
+            return res.status(200).json({success: true, 
+                data:{
+                    id: user._id,
+                    email: user.email,
+                    username: user.username,
+                },token
+            });
         } else {
             return res.status(400).json({success: false, message: 'Wrong password' });
         }   
     } catch (error) {
         return res.status(500).json({success:false, message: 'Internal server error'});
     }
+}
+
+export const getUser = async (req,res) =>{
+    return res.status(200).json(req.user)
+}
+
+const generateToken = (id)=>{
+    return jwt.sign({id},process.env.JWT_SECRET)
 }
