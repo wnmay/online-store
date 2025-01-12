@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import User from './user.model';
 
 const productSchema = new mongoose.Schema({
     name:{
@@ -16,7 +17,12 @@ const productSchema = new mongoose.Schema({
     tag:{
         type: String,
         enum: ["Electronics", "Clothing", "Furniture", "Stationery", "Other"],
-        require: "true",
+        require: true,
+    },
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: User,
     }
 },{
     timestamps: true
