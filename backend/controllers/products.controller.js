@@ -20,7 +20,8 @@ export const postProducts = async (req,res)=>{
 		name: name,
 		price: price,
 		image: `/uploads/${req.file.filename}`,
-		tag: tag
+		tag: tag,
+		user: req.user.id,
 	});
 	try {
 		await addedProduct.save();
@@ -35,8 +36,11 @@ export const deleteProduct = async (req, res) => {
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 	  return res.status(404).json({ success: false, message: "Invalid product ID" });
 	}
+	const product = await Product.findById(id);
+	if(product.user.toString()!== req.user.id){
+		return res.status(401).json({ success: false, message: "This user is not authorized for this action" });
+	}
 	try {
-	  const product = await Product.findById(id);
 	  const imagePath = path.join(__dirname, "../uploads", path.basename(product.image));
 	  await Product.findByIdAndDelete(id);
 	  try {
@@ -79,7 +83,10 @@ export const updateProduct = async (req, res) => {
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(404).json({ success: false, message: "Product not found" });
 	}
-
+	const product = await Product.findById(id);
+	if(product.user.toString()!== req.user.id){
+		return res.status(401).json({ success: false, message: "This user is not authorized for this action" });
+	}
 	try {
 		let updatedFields = { ...req.body };
 		if (req.file) {
