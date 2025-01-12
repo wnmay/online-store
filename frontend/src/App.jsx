@@ -5,6 +5,8 @@ import About from './pages/About';
 import MenuBar from './components/MenuBar';
 import { FilterProvider } from './components/FilterContext';
 import { Toaster } from 'react-hot-toast';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
         <Route path="/" element={<Store />} />
         <Route path="/add" element={<Add />} />
         <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
     </FilterProvider>
